@@ -663,7 +663,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 455,
+   "execution_count": 457,
    "id": "0a6aa0bf-8df8-4fb7-9182-50a328e6a3ff",
    "metadata": {},
    "outputs": [
@@ -672,9 +672,7 @@
      "output_type": "stream",
      "text": [
       "X shape: (6395, 1)\n",
-      "y shape: (6395,)\n",
-      "Index(['Attendance'], dtype='object')\n",
-      "X_train_scaled shape: (5116, 1)\n"
+      "y shape: (6395,)\n"
      ]
     }
    ],
@@ -690,6 +688,28 @@
     "X_train_scaled = scaler.fit_transform(X_train)\n",
     "X_test_scaled = scaler.fit_transform(X_test)\n",
     "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 460,
+   "id": "34de56b9-5fdd-4bb9-b5a6-fa2dd2762559",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Index(['Attendance'], dtype='object')\n",
+      "X_train_scaled shape: (5116, 1)\n",
+      "RMSE: 2.502791010430784\n",
+      "R²: 0.44307943243554804\n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
     "#Use a regression model since it predict continuous numerical values or continuous outputs as the exam_score. RandomForest combines the result of multiple decision trees compared to other regression models that use single decision trees. It will result in a more accurate and stable prediction.\n",
     "model = RandomForestRegressor(n_estimators=100, random_state=42)\n",
     "model.fit(X_train_scaled, y_train)\n",
@@ -698,12 +718,58 @@
     "print(\"X_train_scaled shape:\", X_train_scaled.shape)\n",
     "\n",
     "#model = LinearRegression()\n",
-    "#model.fit(X_train_scaled, y_train)\n"
+    "#model.fit(X_train_scaled, y_train)\n",
+    "\n",
+    "y_pred = model.predict(X_test_scaled)\n",
+    "# Utvärdera modellen\n",
+    "mse = mean_squared_error(y_test, y_pred)\n",
+    "rmse = mse**0.5\n",
+    "r2 = r2_score(y_test, y_pred)\n",
+    "\n",
+    "print(\"RMSE:\", rmse)\n",
+    "print(\"R²:\", r2)"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 456,
+   "execution_count": 462,
+   "id": "896aeed5-a06d-45a7-a711-aac10e2a3ee5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Index(['Attendance'], dtype='object')\n",
+      "X_train_scaled shape: (5116, 1)\n",
+      "RMSE: 2.4895545090275015\n",
+      "R²: 0.448954622617733\n"
+     ]
+    }
+   ],
+   "source": [
+    "\n",
+    "#Try to use LinearRegression model to test if it gives a higher R2 score. And it is a minor difference. \n",
+    "model = LinearRegression()\n",
+    "model.fit(X_train_scaled, y_train)\n",
+    "\n",
+    "print(X_train.columns)\n",
+    "print(\"X_train_scaled shape:\", X_train_scaled.shape)\n",
+    "\n",
+    "\n",
+    "y_pred = model.predict(X_test_scaled)\n",
+    "# Utvärdera modellen\n",
+    "mse = mean_squared_error(y_test, y_pred)\n",
+    "rmse = mse**0.5\n",
+    "r2 = r2_score(y_test, y_pred)\n",
+    "\n",
+    "print(\"RMSE:\", rmse)\n",
+    "print(\"R²:\", r2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 459,
    "id": "2b01377b-23c3-418b-9ee9-8e91c6ad3876",
    "metadata": {},
    "outputs": [
@@ -728,34 +794,6 @@
     "plt.ylabel('Predicted Exam Score')\n",
     "plt.title('Predicted Exam Score vs Attendance')\n",
     "plt.show()"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 454,
-   "id": "a4b24ba1-2865-469d-8926-f082cb5a73a4",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "RMSE: 2.502791010430784\n",
-      "R²: 0.44307943243554804\n"
-     ]
-    }
-   ],
-   "source": [
-    "y_pred = model.predict(X_test_scaled)\n",
-    "\n",
-    "\n",
-    "# Utvärdera modellen\n",
-    "mse = mean_squared_error(y_test, y_pred)\n",
-    "rmse = mse**0.5\n",
-    "r2 = r2_score(y_test, y_pred)\n",
-    "\n",
-    "print(\"RMSE:\", rmse)\n",
-    "print(\"R²:\", r2)"
    ]
   },
   {
