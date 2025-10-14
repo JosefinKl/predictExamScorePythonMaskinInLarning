@@ -225,10 +225,20 @@
     "from sklearn.ensemble import RandomForestRegressor\n",
     "from sklearn.preprocessing import StandardScaler\n",
     "\n",
-    "#Datafile from https://www.kaggle.com/. This dataset was chosen since it was interesting, seemed to have correlation between the data and had enough data in it to make a prediction model. Will create 2 models to predict exam score based on hours studied and attendance. \n",
+    " \n",
     "# Check data file\n",
     "df = pd.read_csv(\"StudentPerformanceFactors.csv\")\n",
     "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "51e46333-4563-4249-9e8d-4cccd2d2b47f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Datafile from https://www.kaggle.com/. This dataset was chosen since it was interesting, seemed to have correlation between the data and had enough data in it to make a prediction model. Will create 2 models to predict exam score based on hours studied and attendance."
    ]
   },
   {
@@ -460,6 +470,16 @@
   },
   {
    "cell_type": "code",
+   "execution_count": null,
+   "id": "59af7c5f-2d37-4b61-9375-b898985efbe5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Box plot to see if there are a big difference between number of females and males. Sligtly more males."
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 444,
    "id": "5f6d089b-9654-4b3a-8e08-1b8febdd6d9b",
    "metadata": {},
@@ -478,6 +498,16 @@
    "source": [
     "sns.countplot(x=\"Gender\", data=df_cleaned)\n",
     "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9d71ebfa-e6ca-4222-9dee-0d293a474e70",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Histplot to see distribution of exam score. Normal distribution"
    ]
   },
   {
@@ -505,6 +535,16 @@
     "\n",
     "\n",
     "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "51d49227-4250-4c34-a40e-abf687939a08",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Histplots of many features. Can see that attemndance is not normal distributed"
    ]
   },
   {
@@ -546,6 +586,18 @@
   },
   {
    "cell_type": "code",
+   "execution_count": null,
+   "id": "e5535922-b631-4a98-bdab-74c776dce6a5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Heatmap to see coreelations in data set, note only numeric values. A correlation are noticed mainly in hours studied and attendance. Hence they are chosen. \n",
+    "#Since the model will be used by students to decide how much then should attend or study, one model for each are created. \n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 447,
    "id": "2daff9b3-d138-4d20-9c79-e3ea50ac0383",
    "metadata": {},
@@ -563,7 +615,7 @@
    ],
    "source": [
     "numeric_df = df_cleaned.select_dtypes(include=[np.number])\n",
-    "# Beräkna korrelationer på den numeriska DataFrame\n",
+    "\n",
     "corr_df = numeric_df.corr()\n",
     "\n",
     "plt.figure(figsize=(11, 9))\n",
@@ -609,6 +661,16 @@
   },
   {
    "cell_type": "code",
+   "execution_count": null,
+   "id": "e9638239-3f97-4436-b48e-6e4e31eed854",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#scatterplot with different colour on female and male. No obvios difference between the genders."
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 449,
    "id": "da06f44a-c812-49a7-a3f3-c94a0d1ca95f",
    "metadata": {},
@@ -635,7 +697,7 @@
     }
    ],
    "source": [
-    "#scatterplot with different colour on female and male\n",
+    "\n",
     "plt.figure(figsize=(10,7))\n",
     "sns.scatterplot(x='Hours_Studied', y='Exam_Score', hue='Gender', data=df_cleaned)\n",
     "\n",
@@ -660,6 +722,16 @@
     "from sklearn.linear_model import LinearRegression\n",
     "from sklearn.metrics import mean_squared_error, r2_score\n",
     "from sklearn.ensemble import RandomForestRegressor\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e1521a88-68a6-4155-8389-ccaeec82fce7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Train model"
    ]
   },
   {
@@ -694,6 +766,19 @@
   },
   {
    "cell_type": "code",
+   "execution_count": 466,
+   "id": "3d46bf06-1c7d-44a9-95ce-ab0c44715399",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Test both RandomForestRegressor and Linear Regression on both attendance and hours studied. \n",
+    "#Use a regression model since it predict continuous numerical values or continuous outputs as the exam_score. \n",
+    "#RandomForest combines the result of multiple decision trees compared to other regression models that use single decision trees. It will result in a more accurate and stable prediction.\n",
+    "#Linear Regression model is faster but due to size of data set no difference will be noticed. Since very litle difference between the models both can be used. RandForestRegressor are chosen. "
+   ]
+  },
+  {
+   "cell_type": "code",
    "execution_count": 460,
    "id": "34de56b9-5fdd-4bb9-b5a6-fa2dd2762559",
    "metadata": {},
@@ -711,7 +796,7 @@
    ],
    "source": [
     "\n",
-    "#Use a regression model since it predict continuous numerical values or continuous outputs as the exam_score. RandomForest combines the result of multiple decision trees compared to other regression models that use single decision trees. It will result in a more accurate and stable prediction.\n",
+    "\n",
     "model = RandomForestRegressor(n_estimators=100, random_state=42)\n",
     "model.fit(X_train_scaled, y_train)\n",
     "\n",
