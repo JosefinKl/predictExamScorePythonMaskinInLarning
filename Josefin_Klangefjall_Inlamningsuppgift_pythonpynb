@@ -225,6 +225,7 @@
     "from sklearn.ensemble import RandomForestRegressor\n",
     "from sklearn.preprocessing import StandardScaler\n",
     "\n",
+    "#Datafile from https://www.kaggle.com/. This dataset was chosen since it was interesting, seemed to have correlation between the data and had enough data in it to make a prediction model. Will create 2 models to predict exam score based on hours studied and attendance. \n",
     "# Check data file\n",
     "df = pd.read_csv(\"StudentPerformanceFactors.csv\")\n",
     "df.head()"
@@ -849,7 +850,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 435,
+   "execution_count": 463,
    "id": "24ed46af-8b04-4db5-be77-d5332aa451fb",
    "metadata": {},
    "outputs": [
@@ -858,9 +859,7 @@
      "output_type": "stream",
      "text": [
       "X shape: (6395, 1)\n",
-      "y shape: (6395,)\n",
-      "RMSE: 2.8774461553477813\n",
-      "R²: 0.26386325687315215\n"
+      "y shape: (6395,)\n"
      ]
     }
    ],
@@ -875,9 +874,59 @@
     "scaler = StandardScaler()\n",
     "X_train_scaled = scaler.fit_transform(X_train)\n",
     "X_test_scaled = scaler.fit_transform(X_test)\n",
-    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 464,
+   "id": "51ff80b4-1dfb-43a7-8a22-a5c11ed603b5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 2.8774461553477813\n",
+      "R²: 0.26386325687315215\n"
+     ]
+    }
+   ],
+   "source": [
     "\n",
     "model = RandomForestRegressor(n_estimators=100, random_state=42)\n",
+    "model.fit(X_train_scaled, y_train)\n",
+    "\n",
+    "y_pred = model.predict(X_test_scaled)\n",
+    "\n",
+    "\n",
+    "# Utvärdera modellen\n",
+    "mse = mean_squared_error(y_test, y_pred)\n",
+    "rmse = mse**0.5\n",
+    "r2 = r2_score(y_test, y_pred)\n",
+    "\n",
+    "print(\"RMSE:\", rmse)\n",
+    "print(\"R²:\", r2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 465,
+   "id": "b9c12f02-9d1e-4915-9cd0-1a3b25f71d5a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "RMSE: 2.870442428891878\n",
+      "R²: 0.26744242089392367\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Try to use LinearRegression model to test if it gives a higher R2 score. And it is a minor difference. \n",
+    "model = LinearRegression()\n",
     "model.fit(X_train_scaled, y_train)\n",
     "\n",
     "y_pred = model.predict(X_test_scaled)\n",
