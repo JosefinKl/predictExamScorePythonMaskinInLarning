@@ -4,10 +4,15 @@ from flask_bcrypt import Bcrypt
 import joblib 
 import numpy as np
 
+#Scalers for the models
 scaler = joblib.load('scaler.joblib')
+scalerHoursAndAttendance=joblib.load('scalerHoursStudiedANDAttendance.joblib')
+scalerHours=joblib.load('scalerHoursStudied.joblib')
+
 
 model_filename = 'exam_score.joblib'
 model_filename_attendance = 'exam_score_attendance.joblib'
+model_filename_hours_studied_and_attendance = 'exam_scoreHoursStudied_And_Attendance.joblib'
 
 try:
     loaded_model = joblib.load(model_filename)
@@ -17,6 +22,13 @@ except FileNotFoundError:
 
 try:
     loaded_model_attendance = joblib.load(model_filename_attendance)
+    print("Modellen laddad")
+except FileNotFoundError:
+    print("Error")
+
+
+try:
+    loaded_model_hours_studied_and_attendance = joblib.load(model_filename_hours_studied_and_attendance)
     print("Modellen laddad")
 except FileNotFoundError:
     print("Error")
@@ -55,21 +67,21 @@ def login():
     
 
 
-#Just to test
+#Welcome message
 @app.route('/', methods=['GET'])
 def get_hello():
-    return 'Hello'
+    return 'Prediction of exam score'
 
 #To predict an exam score based on Hours studied
 @app.route('/examScoreHoursStudied', methods=['POST'])
 @jwt_required()
-def examScore():
+def examScoreHoursStudied():
     data = request.get_json()
     hours_studied = data.get('hours_studied', 0)
     if hours_studied is None:
             return jsonify({'error': 'Missing hours studied value'}), 400
     
-    hours_studied_scaled = scaler.transform(np.array([[hours_studied]]))
+    hours_studied_scaled = scalerHours.transform(np.array([[hours_studied]]))
     predict = loaded_model.predict(hours_studied_scaled)
 
     return jsonify({
@@ -97,6 +109,29 @@ def examScoreAttendance():
         })
 
 
+#To predict an exam score based on Hours studied and Attendance
+@app.route('/examScoreHoursStudiedAndAttendance', methods=['POST'])
+@jwt_required()
+def examScoreHoursStudiedAndAttendance():
+    data = request.get_json()
+    hours_studied = data.get('hours_studied', 0)
+    attendance = data.get('attendance', 0)
+    if hours_studied is None:
+            return jsonify({'error': 'Missing hours studied value'}), 400
+    if attendance is None:
+            return jsonify({'error': 'Missing attendance value'}), 400
+    
+    data_scaled = scalerHoursAndAttendance.transform(np.array([[hours_studied, attendance]]))
+    
+
+
+    predict = loaded_model_hours_studied_and_attendance.predict(data_scaled)
+
+    return jsonify({
+            'hours_studied': hours_studied,
+            'attendance': attendance,
+            'predicted_exam_score': round(float(predict[0]), 2)
+        })
 
     
 
