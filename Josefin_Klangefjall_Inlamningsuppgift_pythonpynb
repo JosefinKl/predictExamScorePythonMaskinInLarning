@@ -238,7 +238,8 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "#Datafile from https://www.kaggle.com/. This dataset was chosen since it was interesting, seemed to have correlation between the data and had enough data in it to make a prediction model. Will create 2 models to predict exam score based on hours studied and attendance."
+    "#Datafile from https://www.kaggle.com/. This dataset was chosen since it was interesting, seemed to have correlation between the data and had enough data in it to make a prediction model. Will create 3 models to predict exam score based on hours studied and attendance, both seperate and together.\n",
+    "#To be used by students to plan their studies. "
    ]
   },
   {
